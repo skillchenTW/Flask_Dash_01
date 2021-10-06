@@ -1,13 +1,24 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
 from form.baseform import LoginForm, RegisterForm
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = "SkillChenSecretKey"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sqlite.db'
+
 Bootstrap(app)
 
-app.config['SECRET_KEY'] = "SkillChenSecretKey"
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+class User(db.Model):
+    email = db.Column(db.String(128), primary_key=True)
+    password = db.Column(db.String(128))
 
 
 
